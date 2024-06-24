@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h2>Login</h2>
+    <form id="loginForm" method="post" action="">
+        {% csrf_token %}
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="log_em"><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="log_ps"><br><br>
+        <button type="submit">Login</button>
+    </form>
+    <div id="message"></div>
+
+    <script>
+    $(document).ready(function() {
+        $('#loginForm').on('submit', function(event) {
+            event.preventDefault();
+            
+            // Serialize form data
+            var formData = $(this).serialize();
+            
+            // Clear previous messages
+            $('#message').html('');
+            
+            // AJAX POST request
+            $.ajax({
+                type: 'POST',
+                url: '',  
+                data: formData,
+                success: function(response) {
+                    // Handle success response
+                    $('#message').html('<p>' + response.message + '</p>');
+                    
+                    if (response.email) {
+                        $('#message').append('<p>Email: ' + response.email + '</p>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response
+                    var errorMessage = xhr.responseJSON.error || 'Something went wrong!';
+                    $('#message').html('<p class="error">' + errorMessage + '</p>');
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
